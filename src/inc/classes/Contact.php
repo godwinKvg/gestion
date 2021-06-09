@@ -1,60 +1,38 @@
 <?php
 
-
 require_once 'Model.php';
 
-class Contact extends Model{ 
-    private $id;
-    private $nom;
-    private $prenom;
-    private $photo;
-    private $telephone1;
-    private $telephone2;
-    private $adresse;
-    private $email_personnel;
-    private $email_pro;
-    private $genre;
+class Contact extends Model
+{
+    protected $id;
+    protected $nom;
+    protected $prenom;
+    protected $photo;
+    protected $telephone1;
+    protected $telephone2;
+    protected $adresse;
+    protected $email_perso;
+    protected $email_pro;
+    protected $genre;
 
 
-// $contact->hydrate(array(
-//     'nom'=>$_POST['nom'],
-//     'prenom'=>$_POST['prenom'],
-//     'photo'=>$_POST['photo'],
-//     'telephone1'=>$_POST['telephone1'],
-//     'telephone2'=>$_POST['telephone2'],
-//     'adresse'=>$_POST['adresse'],
-//     'email_personnel'=>$_POST['email_personnel'],
-//     'email_pro'=>$_POST['email_pro'],
-//     'genre'=>$_POST['genre'],
-// ));
-
-    public function __construct() {
+    public function __construct()
+    {
         $this->table = 'contact';
     }
 
-    // private function beautifyFetch($data){
-    //     return new this(
-    //         $data['id'],
-    //         $data['nom'],
-    //         $data['prenom'],
-    //         $data['photo'],
-    //         $data['telephone1'],
-    //         $data['telephone2'],
-    //         $data['adresse'],
-    //         $data['email_personnel'],
-    //         $data['email_pro'],
-    //         $data['genre'],
 
-    //     )
-    // }
 
-    public function findByName($nom){
-        return $this->findBy(['nom'=>$nom]);
+    public function findByName($nom)
+    {
+        $nom = Sanitizer::sanitize($nom);
+        return $this->findBy(['nom' => $nom]);
     }
-    
-    public function findByPhone($telephone){
 
-        $sql = "SELECT * FROM {$this->table} WHERE telephone1=$telephone OR telephone2=$telephone"; 
+    public function findByPhone($telephone)
+    {
+        $telephone = Sanitizer::sanitize($telephone);
+        $sql = "SELECT * FROM {$this->table} WHERE telephone1=$telephone OR telephone2=$telephone";
         return $this->requete($sql)->fetch();
     }
 
@@ -65,7 +43,7 @@ class Contact extends Model{
      */
     public function getId()
     {
-        return $this->Id;
+        return $this->id;
     }
 
     /**
@@ -74,19 +52,20 @@ class Contact extends Model{
      * @return  self
      */
 
-    public function setId($Id)
+    public function setId($id)
     {
-        $this->Id = $Id;
+
+        $this->id = (int) Sanitizer::sanitize($id);
 
         return $this;
     }
 
-     /**
+    /**
      * Get the value of Nom
      */
     public function getNom()
     {
-        return $this->Nom;
+        return $this->nom;
     }
 
     /**
@@ -94,20 +73,21 @@ class Contact extends Model{
      *
      * @return  self
      */
-    
-    public function setNom($Nom)
+
+    public function setNom($nom)
     {
-        $this->Nom = $Nom;
+
+        $this->nom = Sanitizer::sanitize($nom);
 
         return $this;
     }
 
-     /**
+    /**
      * Get the value of Prenom
      */
     public function getPrenom()
     {
-        return $this->Prenom;
+        return $this->prenom;
     }
 
     /**
@@ -115,20 +95,21 @@ class Contact extends Model{
      *
      * @return  self
      */
-    
-    public function setPrenom($Prenom)
+
+    public function setPrenom($prenom)
     {
-        $this->Prenom = $Prenom;
+
+        $this->prenom = Sanitizer::sanitize($prenom);
 
         return $this;
     }
 
-     /**
+    /**
      * Get the value of Photo
      */
     public function getPhoto()
     {
-        return $this->Photo;
+        return $this->photo;
     }
 
     /**
@@ -136,20 +117,21 @@ class Contact extends Model{
      *
      * @return  self
      */
-    
-    public function setPhoto($Photo)
+
+    public function setPhoto($photo)
     {
-        $this->Photo = $Photo;
+
+        $this->photo = Sanitizer::sanitize($photo);
 
         return $this;
     }
 
-     /**
+    /**
      * Get the value of Telephone1
      */
     public function getTelephone1()
     {
-        return $this->Telephone1;
+        return $this->telephone1;
     }
 
     /**
@@ -157,20 +139,21 @@ class Contact extends Model{
      *
      * @return  self
      */
-    
-    public function setTelephone1($Telephone1)
+
+    public function setTelephone1($telephone1)
     {
-        $this->Telephone1 = $Telephone1;
+
+        $this->telephone1 = Sanitizer::sanitize($telephone1);
 
         return $this;
     }
 
-     /**
+    /**
      * Get the value of Telephone2
      */
     public function getTelephone2()
     {
-        return $this->Telephone2;
+        return $this->telephone2;
     }
 
     /**
@@ -178,20 +161,21 @@ class Contact extends Model{
      *
      * @return  self
      */
-    
-    public function setTelephone2($Telephone2)
+
+    public function setTelephone2($telephone2)
     {
-        $this->Telephone2 = $Telephone2;
+
+        $this->telephone2 = Sanitizer::sanitize($telephone2);
 
         return $this;
     }
 
-     /**
+    /**
      * Get the value of Adresse
      */
     public function getAdresse()
     {
-        return $this->Adresse;
+        return $this->adresse;
     }
 
     /**
@@ -199,20 +183,21 @@ class Contact extends Model{
      *
      * @return  self
      */
-    
-    public function setAdresse($Adresse)
+
+    public function setAdresse($adresse)
     {
-        $this->Adresse = $Adresse;
+
+        $this->adresse = Sanitizer::sanitize($adresse);
 
         return $this;
     }
 
-     /**
+    /**
      * Get the value of Email_perso
      */
     public function getEmail_perso()
     {
-        return $this->Email_perso;
+        return $this->email_perso;
     }
 
     /**
@@ -220,20 +205,21 @@ class Contact extends Model{
      *
      * @return  self
      */
-    
-    public function setEmail_perso($Email_perso)
+
+    public function setEmail_perso($email_perso)
     {
-        $this->Email_perso = $Email_perso;
+
+        $this->email_perso = Sanitizer::sanitize($email_perso);
 
         return $this;
     }
 
-     /**
+    /**
      * Get the value of Email_pro
      */
     public function getEmail_pro()
     {
-        return $this->Email_pro;
+        return $this->email_pro;
     }
 
     /**
@@ -241,20 +227,21 @@ class Contact extends Model{
      *
      * @return  self
      */
-    
-    public function setEmail_pro($Email_pro)
+
+    public function setEmail_pro($email_pro)
     {
-        $this->Email_pro = $Email_pro;
+
+        $this->email_pro = Sanitizer::sanitize($email_pro);
 
         return $this;
     }
 
-     /**
+    /**
      * Get the value of Genre
      */
     public function getGenre()
     {
-        return $this->Genre;
+        return $this->genre;
     }
 
     /**
@@ -262,10 +249,11 @@ class Contact extends Model{
      *
      * @return  self
      */
-    
-    public function setGenre($Genre)
+
+    public function setGenre($genre)
     {
-        $this->Genre = $Genre;
+
+        $this->genre = Sanitizer::sanitize($genre);
 
         return $this;
     }

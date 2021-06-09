@@ -1,8 +1,6 @@
 <?php
 
 
-use PDO;
-use PDOException;
 
 class Database extends PDO
 {
@@ -13,7 +11,7 @@ class Database extends PDO
     private const DBHOST = 'localhost';
     private const DBUSER = 'root';
     private const DBPASS = '';
-    private const DBNAME ='gestionContact';
+    private const DBNAME = 'gestioncontact';
 
     private function __construct()
     {
@@ -41,7 +39,4 @@ class Database extends PDO
         }
         return self::$instance;
     }
-
-
-
 }

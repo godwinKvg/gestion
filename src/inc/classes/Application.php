@@ -10,16 +10,16 @@ class Application
     public static function process()
     {
         $PAGE_PATH = 'src/inc/pages/';
-        $params = [];
+        $param = '';
 
         if (isset($_GET['p'])) {
-            $params = explode('/', $_GET['p']);
+            $param = $_GET['p'];
         }
 
+        if (!empty($param)) {
 
-        if (!empty($params[0])) {
+            $file = $param;
 
-            $file =  (isset($params[0])) ? array_shift($params) : 'contact';
 
             $file = $PAGE_PATH . $file . '.php';
 
@@ -27,7 +27,7 @@ class Application
                 require_once $file;
             } else {
                 http_response_code(404);
-                echo "La page recherchée n'existe pas";
+                require_once 'error.php';
             }
         } else {
             require_once $PAGE_PATH . 'contact.php';

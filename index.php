@@ -1,7 +1,11 @@
 <?php
-require_once 'src/inc/partials/header.php';
 
-require_once 'src/inc/classes/Application.php';
+require_once 'src/inc/classes/Autoloader.php';
+Autoloader::register();
+require_once 'src/inc/partials/header.php';
+Message::showGetMsg();
+
+
 Application::process();
 
 

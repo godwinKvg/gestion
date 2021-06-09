@@ -1,12 +1,13 @@
 <?php
 
-class sanitizer{
+class Sanitizer
+{
 
 
     /**
      * Neutralise la chaine de caractère passée comme paramètre
      */
-    private function sanitize($var)
+    public static function sanitize($var)
     {
         $r = isset($var) ? htmlspecialchars(trim($var)) : "";
 
@@ -20,22 +21,24 @@ class sanitizer{
      * Neutralise la chaine de caractère envoyée par POST
      */
 
-    public function sanitizePost($var)
+    public static function sanitizePost($var)
     {
-        $r = isset($_POST[$var]) ? sanitize($_POST[$var]) : "";
-
+        $r = isset($_POST[$var]) ? self::sanitize($_POST[$var]) : "";
         return $r;
     }
 
     /**
      * Neutralise la chaine de caractère envoyée par GET
+     * 
+     * Retourne une chaîne de caractères contenant la valeur de $_GET[$var]
+     *
+     * @param mixed $var
+     * @return string
      */
-    public function sanitizeGet($var)
+    public static function sanitizeGet($var)
     {
-        $r = isset($_GET[$var]) ? sanitize($_GET[$var]) : "";
+        $r = isset($_GET[$var]) ? self::sanitize($_GET[$var]) : "";
 
         return $r;
     }
-
-
 }

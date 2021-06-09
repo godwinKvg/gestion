@@ -1,7 +1,10 @@
-<?php 
+<?php
 
-class Validators{
-    
+require_once 'Sanitizer';
+
+class Validators
+{
+
     /**
      * Permet d'avoir les erreurs de validation d'un formulaire sous forme d'une liste à puces
      */
@@ -10,7 +13,7 @@ class Validators{
         $errors = '';
         if (isset($ValidationErros[$key])) {
 
-            $errors = arrayToUL($ValidationErros[$key], 'text-danger');
+            $errors = $this->arrayToUL($ValidationErros[$key], 'text-danger');
         }
 
         return $errors;
@@ -21,7 +24,7 @@ class Validators{
      */
     public function printValidationError($ValidationErros, $key)
     {
-        echo getValidationError($ValidationErros, $key);
+        echo $this->getValidationError($ValidationErros, $key);
     }
 
     /**
@@ -29,8 +32,22 @@ class Validators{
      */
     public function sanitazePost($var)
     {
-        $r = isset($_POST[$var]) ? sanitaze($_POST[$var]) : "";
+        $r = isset($_POST[$var]) ? Sanitizer::sanitize($_POST[$var]) : "";
 
         return $r;
+    }
+
+    /**
+     * Construit une liste à puce avec les données d'un tableau
+     */
+    function arrayToUL($array, $class)
+    {
+        $ul = '<ul>';
+        foreach ($array as $li) {
+            $ul .= '<li class="' . $class . '">' . $li . '</li>';
+        }
+        $ul .= '</ul>';
+
+        return $ul;
     }
 }

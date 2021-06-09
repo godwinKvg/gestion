@@ -1,7 +1,6 @@
 <?php
 
 require_once 'Database.php';
-
 abstract class Model extends Database
 {
     private $pdo;
@@ -14,6 +13,8 @@ abstract class Model extends Database
      * @param array $attributes Attributs à ajouter à la requête 
      * @return PDOStatement|false 
      */
+
+
     public function requete(string $sql, array $attributs = null)
     {
         $this->pdo = Database::getInstance();
@@ -45,7 +46,7 @@ abstract class Model extends Database
 
     public function find(int $id)
     {
-        return $this->requete("SELECT * FROM {$this->table} WHERE id = $id")->fetch();
+        return $this->requete("SELECT * FROM {$this->table} WHERE id = ?", array($id))->fetch();
     }
 
     public function findAll()
@@ -55,7 +56,7 @@ abstract class Model extends Database
     }
 
     /**
-     * Supprime une commande/newsletter en base de données
+     * Supprimer en base de données
      *
      * @param integer $id
      * @param string $table
@@ -63,13 +64,13 @@ abstract class Model extends Database
      */
     public function delete(int $id)
     {
-        $this->requete("DELETE FROM {$this->table} WHERE id = ?", [$id]);
+        $this->requete("DELETE FROM {$this->table} WHERE id = ?", array($id));
     }
 
     public function findBy(array $criteres)
     {
-        $champs = [];
-        $valeurs = [];
+        $champs = array();
+        $valeurs = array();
 
         foreach ($criteres as $champ => $valeur) {
 
@@ -77,9 +78,13 @@ abstract class Model extends Database
             $valeurs[] = $valeur;
         }
 
+
+
         $liste_champs = implode(' AND ', $champs);
 
-        return $this->requete('SELECT * FROM ' . $this->table . ' WHERE ' . $liste_champs, $valeurs);
+
+
+        return $this->requete('SELECT * FROM ' . $this->table . ' WHERE ' . $liste_champs, $valeurs)->fetch();
     }
 
     public function update()
@@ -143,7 +148,6 @@ abstract class Model extends Database
 
 
             if (method_exists($this, $setter)) {
-
                 $this->$setter($value);
             }
         }
