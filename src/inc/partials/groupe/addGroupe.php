@@ -1,10 +1,12 @@
-<div class="d-flex -align-items-center justify-content-center flex-column h-100" style="background: url(src/public/images/bg.jpeg);background-repeat:no-repeat;background-size:cover">
-    <h3 class="text-center text-white mt-3">Creation de Contact</h3>
+<div class="d-flex -align-items-center justify-content-center flex-column h-100"
+    style="background: url(src/public/images/bg.jpeg);background-repeat:no-repeat;background-size:cover">
+    <h3 class="text-center text-white mt-3">Creation de Groupe</h3>
     <form method="POST" id="addForm" enctype="multipart/form-data">
 
         <div class="d-flex align-items-center flex-column text-white">
             <label for="photo" class="form-label text-white mb-3">
-                <img src="/src/public/images/groupe.png" alt="Conact Profile" class="visuall-hidden rounded-circle" width="80" height="80">
+                <img src="/src/public/images/groupe.png" alt="Conact Profile" class="visuall-hidden rounded-circle"
+                    width="80" height="80">
             </label>
             <input type="file" name="photo" id="photo" accept="image/*">
         </div>

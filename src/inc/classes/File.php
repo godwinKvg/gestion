@@ -51,7 +51,7 @@ class File
             // $uploadOk = false;
             return array(
                 "upload" => false,
-                "error" => "Extension Invalide!"
+                "error" => "Extension de l'image Invalide!"
             );
         }
 

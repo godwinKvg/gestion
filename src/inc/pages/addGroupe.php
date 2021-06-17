@@ -1,7 +1,6 @@
 <?php
 // session_start();
 
-include_once 'src/inc/partials/header.php';
 
 require_once 'src/inc/classes/Groupe.php';
 require_once 'src/inc/classes/Sanitizer.php';
@@ -56,35 +55,37 @@ if (!empty($_POST)) {
 }
 
 
+require_once 'src/inc/partials/header.php';
+Message::showGetMsg();
 
 require_once 'src/inc/partials/groupe/addGroupe.php';
 
 ?>
 
 <script>
-    const addFrom = document.querySelector('#addForm');
-    const progress = document.querySelector('.progress');
-    // Gere le chargement de fichier dans le navigateur
-    // C'est pour faire la preview 
-    // de ce à quoi son profil ressemblera
-    addFrom?.querySelector('input[type=file]').addEventListener('change', e => {
+const addFrom = document.querySelector('#addForm');
+const progress = document.querySelector('.progress');
+// Gere le chargement de fichier dans le navigateur
+// C'est pour faire la preview 
+// de ce à quoi son profil ressemblera
+addFrom?.querySelector('input[type=file]').addEventListener('change', e => {
 
-        const target = e.target;
-        let file = target.files[0];
-        if (file) {
-            progress.classList.remove("d-none");
-            const reader = new FileReader();
+    const target = e.target;
+    let file = target.files[0];
+    if (file) {
+        progress.classList.remove("d-none");
+        const reader = new FileReader();
 
-            reader.onload = (e) => {
-                setTimeout(() => {
-                    progress.classList.add("d-none");
-                }, 1000);
+        reader.onload = (e) => {
+            setTimeout(() => {
+                progress.classList.add("d-none");
+            }, 1000);
 
-                target.previousElementSibling.querySelector('img').src = e.currentTarget.result;
-            }
-
-            reader.readAsDataURL(file);
+            target.previousElementSibling.querySelector('img').src = e.currentTarget.result;
         }
 
-    });
+        reader.readAsDataURL(file);
+    }
+
+});
 </script>

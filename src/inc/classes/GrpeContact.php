@@ -4,16 +4,16 @@
 class Contact
 {
     protected $id;
-    protected $idGroupe;
-    protected $idContact;
+    protected $id_gpe;
+    protected $id_contact;
 
     public function __construct($id, $idGroupe, $idContact)
     {
-        $this->table = 'groupe';
+        $this->table = 'groupe_contact';
 
         $this->id = $id;
-        $this->idGroupe = $idGroupe;
-        $this->idContact = $idContact;
+        $this->id_gpe = $idGroupe;
+        $this->id_contact = $idContact;
     }
 
 

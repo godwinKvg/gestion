@@ -1,33 +1,28 @@
 <?php
 require_once '../inc/classes/File.php';
-require_once '../inc/classes/Contact.php';
+require_once '../inc/classes/Groupe.php';
 require_once '../inc/classes/Sanitizer.php';
 require_once '../inc/classes/Config.php';
 
-$contact = new Contact;
+$groupe = new Groupe;
 
 
-if (!empty($_POST)) {
+if (!empty($_POST) ) {
 
     //  Recupération des valeurs venant de la requete
-    $contactInfo = array(
+    $groupeInfo = array(
         "id" => (int) Sanitizer::sanitizePost("id"),
         "nom" => Sanitizer::sanitizePost("nom"),
-        "prenom" => Sanitizer::sanitizePost("prenom"),
-        "telephone1" => Sanitizer::sanitizePost("telephone1"),
-        "telephone2" => Sanitizer::sanitizePost("telephone2"),
-        "email_pro" => Sanitizer::sanitizePost("email_pro"),
-        "email_perso" => Sanitizer::sanitizePost("email_perso"),
-        "adresse" => Sanitizer::sanitizePost("adresse"),
-        "genre" => Sanitizer::sanitizePost("genre"),
     );
 
+    // echo json_encode($groupeInfo);
 
-    // Ajout des valeurs aux attributs de contact
-    $contact->hydrate($contactInfo);
-    // var_dump($contact);
 
-    // Verification d'envoi de fichier puis mise à jour de la photo du contact
+    // Ajout des valeurs aux attributs de groupe
+    $groupe->hydrate($groupeInfo);
+    // var_dump($groupe);
+
+    // Verification d'envoi de fichier puis mise à jour de la image du groupe
     if (!empty($_FILES["photo"]["name"])) {
 
         $file = new File($_FILES["photo"]["name"]);
@@ -45,11 +40,13 @@ if (!empty($_POST)) {
             $filename = $uploadResult['file'];
 
 
-            $oldValue = $contact->findBy(array("id" => $contact->getId()));
+            $oldValue = $groupe->findBy(array("id" => $groupe->getId()));
 
-            if (isset($oldValue->photo) && !empty($oldValue->photo)) {
+
+
+            if (isset($oldValue->image) && !empty($oldValue->image)) {
                  try {
-                if (!unlink(Config::UPLOAD_URL . $oldValue->photo)) {
+                if (!unlink(Config::UPLOAD_URL . $oldValue->image)) {
 
                     $response = array(
                         "status" => 404,
@@ -57,7 +54,7 @@ if (!empty($_POST)) {
                     );
                     // $response = array(
                     //     "status" => 200,
-                    //     "message" => json_encode($contactInfo)
+                    //     "message" => json_encode($groupeInfo)
                     // );
 
                     sendResponse($response);
@@ -65,20 +62,20 @@ if (!empty($_POST)) {
                 } catch (Exception $e) {
                     // TODO : Enregistrer dans le journal
 
-                    // echo json_encode($e);
-                    return;
+                    echo json_encode($e);
+                    // return;
                 }
             }
-            $contactInfo = array_merge($contactInfo, array("photo" => $filename));
+            $groupeInfo = array_merge($groupeInfo, array("image" => $filename));
         }
     }
 
-    $contact->hydrate($contactInfo);
-    $contact->update();
+    $groupe->hydrate($groupeInfo);
+    $groupe->update();
 
     $response = array(
         "status" => 200,
-        "message" => json_encode($contactInfo)
+        "message" => json_encode($groupeInfo)
     );
 
     sendResponse($response);
@@ -86,24 +83,34 @@ if (!empty($_POST)) {
 
 // REQUETE GET => Demande d'informations auprès de la base de données Ou Suppression
 
-elseif (isset($_GET)) {
+if (isset($_GET)) {
 
 
     // SI DELETE alors on supprime l'élément. 
     // C'est un cas spécial de GET 
     // Normalement on pouvait utiliser la methode DETELE
-
+    if (!empty($_GET['idC'])) {
+        $id = (int)Sanitizer::sanitizeGet('idC');
+        $groups = $groupe->findAllByContactId(44);
+        $response  = array(
+                "status" => 200,
+                "message" => json_encode($groups)
+            );
+        sendResponse($response);
+    }
     if (!empty($_GET['action']) and strtolower(Sanitizer::sanitizeGet("action")) === "delete") {
-        $currentContact = $contact->findBy(array("id" => Sanitizer::sanitizeGet("id")));
+        $currentContact = $groupe->findBy(array("id" => Sanitizer::sanitizeGet("id")));
     
-
-        if (isset($currentContact->photo) && !empty($currentContact->photo)) {
+        $nom = $currentContact->nom;
+        if (isset($currentContact->image) && !empty($currentContact->image)) {
             // try {
-            if (!unlink(Config::UPLOAD_URL . $currentContact->photo)) {
+
+
+            if (!unlink(Config::UPLOAD_URL . $currentContact->image)) {
 
                 $response = array(
                     "status" => 404,
-                    "message" => "Error : Contact with id " . Sanitizer::sanitizeGet("id") . " not deleteted!"
+                    "message" => "Error : Groupe with id " . Sanitizer::sanitizeGet("id") . " not deleteted!"
                 );
 
                 sendResponse($response);
@@ -113,25 +120,23 @@ elseif (isset($_GET)) {
             // }
         }
 
-        $contact->delete((int)Sanitizer::sanitizeGet("id"));
+        $groupe->delete((int)Sanitizer::sanitizeGet("id"));
 
 
         $response = array(
             "status" => 200,
-            "message" => "Contact with id " . Sanitizer::sanitizeGet("id") . " deleted!"
+            "message" => "Groupe " . $nom . " a ete supprime!"
         );
 
         sendResponse($response);
     }
-// elseif (!empty($_GET['action']) and strtolower(Sanitizer::sanitizeGet("action")) === "getGroups") {
-    
-// }
+
     // Sinon on renvoie la ressource demandée
     else {
         $response =
             array(
                 "status" => 200,
-                "message" => json_encode($contact->find((int)Sanitizer::sanitizeGet("id")))
+                "message" => json_encode($groupe->find((int)Sanitizer::sanitizeGet("id")))
 
             );
 
@@ -139,10 +144,18 @@ elseif (isset($_GET)) {
     }
 }
 
+// Recuperation des contacts d'un groupe
 
 
 
 
+/*
+* Recieve array
+* Examples  $response = array(
+            "status" => 200,
+            "message" => "Groupe " . $nom . " a ete supprime!"
+        );
+*/
 
 function sendResponse($resp)
 {

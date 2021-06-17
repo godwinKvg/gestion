@@ -1,10 +1,8 @@
 <?php
 
 require_once 'src/inc/classes/Autoloader.php';
-Autoloader::register();
-require_once 'src/inc/partials/header.php';
-Message::showGetMsg();
 
+Autoloader::register();
 
 Application::process();
 

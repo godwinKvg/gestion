@@ -1,5 +1,6 @@
 <!-- Modal -->
-<div class="modal fade" id="updateContact" data-bs-backdrop="static" data-bs-keyboard="true" tabindex="-1" aria-labelledby="updateLabel" aria-hidden="true">
+<div class="modal fade" id="updateContact" data-bs-backdrop="static" data-bs-keyboard="true" tabindex="-1"
+    aria-labelledby="updateLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
         <div class="modal-content">
 
@@ -13,7 +14,8 @@
                         <div class="col-md-12">
                             <div class="d-flex align-items-center flex-column">
                                 <label for="photo" class="form-label">
-                                    <img src="src/public/images/profile.svg" alt="Conact Profile" class="visuall-hidden rounded-circle" width="70px" height="70px">
+                                    <img src="src/public/images/profile.svg" alt="Contact  Profile"
+                                        class="visuall-hidden rounded-circle" width="70px" height="70px">
                                 </label>
                                 <input type="file" id="photo" accept="image/*" name="photo">
                             </div>

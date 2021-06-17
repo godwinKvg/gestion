@@ -6,7 +6,8 @@
             <div class="col-md-12">
                 <div class="d-flex align-items-center flex-column">
                     <label for="photo" class="form-label">
-                        <img src="/src/public/images/profile.svg" alt="Conact Profile" class="visuall-hidden rounded-circle" width="80" height="80">
+                        <img src="/src/public/images/profile.svg" alt="Conact Profile"
+                            class="visuall-hidden rounded-circle" width="80" height="80">
                     </label>
                     <input type="file" name="photo" id="photo" accept="image/*">
                 </div>

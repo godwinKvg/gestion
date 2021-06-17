@@ -48,8 +48,46 @@ CREATE TABLE IF NOT EXISTS `contact` (
 --
 
 INSERT INTO `contact` (`id`, `nom`, `prenom`, `email_pro`, `email_perso`, `telephone1`, `telephone2`, `adresse`, `genre`, `photo`) VALUES
-(1, 'kavege', 'kodjo godwin', 'goddwinkavege@gmail.com', 'godwinkvg@gmail.com', '+212638796620', '+212762408108', 'Rue Souani', 'homme', '1621851554.png'),
-(2, 'Moina', 'El Hadj', 'moinahadji@get.com', 'test@testing.get', '+232 93 939 73', '+383 3838339', 'Mon Domicile', 'femme', NULL);
+(1, 'kavege', 'kodjo godwin', 'goddwinkavege@gmail.com', 'godwinkvg@gmail.com', '+212638796620', '+212762408108', 'Rue Souani', 'homme', '2.jfif'),
+(2, 'Nadah', 'El Meliani', 'ElMeliani@gmail.com', 'ElMeliani@gmail.com', '+232 93 939 73', '+383 3838339', 'Mon Domicile', 'femme', '3.png'),
+(3, 'Dahbia', 'Mrabet', 'Mrabet@gmail.com', 'Mrabet@gmail.com', '+232 93 939 73', '+383 3838339', 'Mon Domicile', 'femme', '11.jfif'),
+(4, 'Bahéchar', 'Salamah', 'Salamah@gmail.com', 'Salamah@gmail.com', '+232 93 939 73', '+383 3838339', 'Mon Domicile', 'homme', '12.jfif'),
+(5, 'Saadet', 'Oufkir', 'Oufkir@gmail.com', 'Oufkir@gmail.com', '+232 93 939 73', '+383 3838339', 'Mon Domicile', 'femme', '4.jpg'),
+(6, 'Hudun', 'Assaraf', 'Assaraf@gmail.com', 'Assaraf@gmail.com', '+232 93 939 73', '+383 3838339', 'Mon Domicile', 'femme', '6.jpg'),
+(7, 'Zafzaf', 'Reshma', 'Reshma@gmail.com', 'Reshma@gmail.com', '+232 93 939 73', '+383 3838339', 'Mon Domicile', 'femme', '8.jfif'),
+(8, 'Seddiki', 'Hanane', 'Hanane@gmail.com', 'Hanane@gmail.com', '+232 93 939 73', '+383 3838339', 'Mon Domicile', 'femme', '11.jfif'),
+(9, 'Abécassis', 'Baysan', 'Baysan@gmail.com', 'Baysan@gmail.com', '+232 93 939 73', '+383 3838339', 'Mon Domicile', 'femme', '4.jfif'),
+(10, 'Qamari', 'Jabalah', 'Jabalah@gmail.com', 'Jabalah@gmail.com', '+232 93 939 73', '+383 3838339', 'Mon Domicile', 'homme', '7.jpg');
+
+
+
+-- -------------------------------------------------------
+
+--
+-- Structure de la table `groupe`
+--
+
+DROP TABLE IF EXISTS `groupe`;
+CREATE TABLE IF NOT EXISTS `groupe` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nom` varchar(255) COLLATE utf8_bin NOT NULL,
+  `image` varchar(255) COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+COMMIT;
+
+--
+-- Déchargement des données de la table `groupe`
+--
+
+
+INSERT INTO `groupe` (`id`, `nom`, `image`) VALUES 
+(1, 'Famille', 'famille.jfif'),
+(2, 'Amis', 'amis.jfif'),
+(3, 'Informatique', 'info.jfif'),
+(4, 'Industriel', 'industriel.jfif');
+(4, 'hacker', 'hacker.png');
+
 
 -- --------------------------------------------------------
 
@@ -68,18 +106,29 @@ CREATE TABLE IF NOT EXISTS `contact_groupe` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `groupe`
+-- Déchargement des données de la table `contact_groupe`
 --
+INSERT INTO `contact_groupe`(`id`, `id_gpe`, `id_contact`) VALUES 
+(1 ,1,1),
+(2 ,1,2),
+(3 ,2,2),
+(4 ,2,1),
+(5 ,3,1),
+(6 ,3,2),
+(7 ,4,3),
+(8 ,3,4),
+(9 ,4,5),
+(10 ,4,6),
+(11 ,4,7),
+(12 ,3,8),
+(13 ,3,9),
+(14 ,4,10),
+(15 ,1,11),
+(16 ,2,12),
+(17 ,2,13),
+(18 ,2,14),
+(19 ,3,15),
+(20 ,4,16),
+(21 ,4,17),
+(22 ,1,18);
 
-DROP TABLE IF EXISTS `groupe`;
-CREATE TABLE IF NOT EXISTS `groupe` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nom` varchar(255) COLLATE utf8_bin NOT NULL,
-  `image` varchar(255) COLLATE utf8_bin NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-COMMIT;
-
-/*!40101 SET CHARgit ACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

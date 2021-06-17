@@ -1,6 +1,7 @@
 <?php
 
 require_once 'Model.php';
+require_once 'GrpeContact.php';
 class Groupe extends Model
 {
     protected $id;
@@ -16,6 +17,11 @@ class Groupe extends Model
     public function findByName($nom)
     {
         return $this->findBy(['nom' => $nom]);
+    }
+
+    public function findAllByContactId(int $id){
+        $sql = "SELECT g.* FROM {$this->table} g, contact_groupe gc WHERE gc.id_contact= {$id} AND gc.id_contact= g.id ";
+        return $this->requete($sql)->fetch();
     }
 
     /**

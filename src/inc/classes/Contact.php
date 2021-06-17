@@ -36,7 +36,10 @@ class Contact extends Model
         return $this->requete($sql)->fetch();
     }
 
-
+    // public static function getGroups($id){
+    //     $sql = "SELECT * FROM {$this->table}, groupe_contact WHERE telephone1=$telephone OR telephone2=$telephone";
+    //     return $this->requete($sql)->fetch();
+    // }
 
     /**
      * Get the value of Id

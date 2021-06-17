@@ -2,48 +2,18 @@
 
 require_once 'src/inc/classes/Groupe.php';
 
-$groupe = new Groupe();
+$groupe = new Groupe;
 
 $groups = $groupe->findAll();
 
 if (!empty($groups)) {
 
-        require_once 'src/inc/groupe/groupList.php';
+    require_once 'src/inc/partials/header.php';
+    require_once 'src/inc/partials/groupe/groupList.php';
 
 ?>
 
-    <script>
-        const GROUPE_API_URL = 'src/api/gestionGroupe.php';
-        const IMAGE_DIRECTORY = "/upload/";
-        const PUBLIC_DIRECTORY = "src/public/images/groupe.png";
-
-        let deleteAlert = document.querySelector('#deleteAlert');
-        querySelectorAll('.alert').forEach(elt => {
-            elt.ClassList.add('show');
-        })
-
-
-        const progress = document.querySelector('.progress');
-
-
-        // Fonctions appélées dans ContactList
-
-
-
-        function supprimerGroupe(id) {
-            if (confirm("Voulez vous vraiment supprimer ce groupe ?"))
-
-                fetch(CONTACT_API_URL + "?action=delete&id=" + id)
-                .then(data => data.json())
-                .then(data => {
-                    if (data.status === 200) {
-                        console.log(data.message);
-                        document.querySelector("#row" + id).remove();
-                    }
-                })
-                .catch(err => console.log(err));
-        }
-    </script>
+<script src="src/public/js/groupe.js"></script>
 
 <?php
 } else {
