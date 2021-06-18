@@ -16,9 +16,19 @@ if (!empty($_POST)) {
 
     $groupe = new Groupe;
 
-
+    $nom = Sanitizer::sanitizePost("nom");
     //  Recupération des valeurs venant de la requete
-    $groupe->setNom(Sanitizer::sanitizePost("nom"));
+    $groupe->setNom($nom);
+
+    // Si le groupe existe deja on lui envoie une erreur
+    $groupeExists = $groupe->findBy(array(
+        "nom" => $nom
+    ));
+
+    if (!empty($groupeExists)) {
+        header("location:?status=-1&msg=Groupe existe deja");
+        exit();
+    }
 
 
     // Verification d'envoi de fichier puis mise à jour de la photo du groupe
@@ -27,16 +37,17 @@ if (!empty($_POST)) {
         $file = new File($_FILES["photo"]["name"]);
 
         $uploadResult = $file->uploadFile();
+        // var_dump($uploadResult);
 
-        if (isset($uploadResult["upload"]) and !$uploadResult["upload"]) {
+        // exit();
 
-            // header("location:?status=-1&msg=".$uploadResult['error']);
+        if (!$uploadResult["upload"]) {
 
+            header("location:?status=-1&msg=" . $uploadResult['error']);
+            exit();
         } else {
             $filename = $uploadResult['file'];
             $groupe->setImage($filename);
-
-            
         }
     } else {
         header("location:?status=-1&msg=Veuillez ajouter l'image du groupe");
@@ -44,12 +55,19 @@ if (!empty($_POST)) {
     }
 
     try {
-        $groupe->insert();
-        header("location:?status=1&msg=Groupe Crée. Félicitations!!!!");
-        exit();
+        if ($groupe->getImage()) {
+            $groupe->insert();
+            header("location:?status=1&msg=Groupe Crée. Félicitations!!!!");
+            exit();
+        } else {
+            echo $ex;
+            header("location:?status=-1&msg=L'image n'a pas pu etre enregistre!");
+            exit();
+        }
     } catch (Exception $ex) {
         // TODO : Enregistrer dans le journal
-        // header("location:?status=-1&msg=Une erreur est survenue! Veuillez ressayer");
+        echo $ex;
+        header("location:?status=-1&msg=Une erreur est survenue! Veuillez ressayer");
         exit();
     }
 }

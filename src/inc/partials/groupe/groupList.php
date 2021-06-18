@@ -35,7 +35,7 @@
         <!-- Modal pour la modification des groupes -->
         <div class="modal fade" id="staticBackdrop<?= $g->id ?>" data-bs-backdrop="static" data-bs-keyboard="false"
             tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog  modal-sm modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-dialog  modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header py-0">
                         <h5 class="modal-title" id="staticBackdropLabel<?= $g->id ?>">Modifier Groupe</h5>
@@ -71,5 +71,5 @@
 
 
 
-    <a class="btn btn-primary mb-2" href="/addGroupe">Ajouter Groupe</a>
+    <a class="btn btn-primary my-2" href="/addGroupe">Ajouter Groupe</a>
 </div>

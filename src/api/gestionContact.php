@@ -51,26 +51,13 @@ if (!empty($_POST)) {
 
             if (isset($oldValue->photo) && !empty($oldValue->photo)) {
                 try {
-                    if (!unlink(Config::UPLOAD_URL . $oldValue->photo)) {
-
-                        $response = array(
-                            "status" => 404,
-                            "message" => "Une erreur est survenue! Veuillez réessayer"
-                        );
-                        // $response = array(
-                        //     "status" => 200,
-                        //     "message" => json_encode($contactInfo)
-                        // );
-
-                        sendResponse($response);
-                    }
+                    unlink(Config::UPLOAD_URL . $oldValue->photo);
                 } catch (Exception $e) {
                     // TODO : Enregistrer dans le journal
-
-                    // echo json_encode($e);
-                    return;
+                    // Example : La photo du contact ($currentContact->nom) avec l'id Sanitizer::sanitizeGet("id") n'a pas ete supprime ( $currentContact->photo)code($e);
                 }
             }
+
             $contactInfo = array_merge($contactInfo, array("photo" => $filename));
         }
     }
@@ -119,50 +106,29 @@ elseif (isset($_GET)) {
     // C'est un cas spécial de GET 
     // Normalement on pouvait utiliser la methode DETELE
 
-    if (!empty($_GET['action']) and strtolower(Sanitizer::sanitizeGet("action")) === "delete") {
+    if (Sanitizer::sanitizeGet("action") === "delete") {
         $currentContact = $contact->findBy(array("id" => Sanitizer::sanitizeGet("id")));
         $nom = $currentContact->nom;
+        if (!empty($currentContact->photo)) {
+            try {
 
-        if (isset($currentContact->photo) && !empty($currentContact->photo)) {
-            // try {
-
-            if (!unlink(Config::UPLOAD_URL . $currentContact->photo)) {
-
-                $response = array(
-                    "status" => 404,
-                    "message" => "Error : Contact with id " . Sanitizer::sanitizeGet("id") . " not deleteted!"
-                );
-
-                sendResponse($response);
+                unlink(Config::UPLOAD_URL . $currentContact->photo);
+            } catch (Exception $e) {
+                // TODO : Enregistrer dans le journal
+                // Example : La photo du contact ($currentContact->nom) avec l'id Sanitizer::sanitizeGet("id") n'a pas ete supprime ( $currentContact->photo)
             }
-            // } catch (Exception $e) {
-            // TODO : Enregistrer dans le journal
-            // }
         }
-        $groupeContact->removeGroupe((int)Sanitizer::sanitizeGet("id"));
+
+        $groupeContact->removeContact((int)Sanitizer::sanitizeGet("id"));
 
         $contact->delete((int)Sanitizer::sanitizeGet("id"));
+
 
 
         $response = array(
             "status" => 200,
             "message" => "Contact {" . $nom . "} deleted!"
         );
-
-        sendResponse($response);
-    }
-
-
-
-
-    // Sinon on renvoie la ressource demandée
-    else {
-        $response =
-            array(
-                "status" => 200,
-                "message" => json_encode($contact->find((int)Sanitizer::sanitizeGet("id")))
-
-            );
 
         sendResponse($response);
     }

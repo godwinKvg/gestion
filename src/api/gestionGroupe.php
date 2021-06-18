@@ -17,12 +17,8 @@ if (!empty($_POST)) {
         "nom" => Sanitizer::sanitizePost("nom"),
     );
 
-    // echo json_encode($groupeInfo);
-
-
     // Ajout des valeurs aux attributs de groupe
     $groupe->hydrate($groupeInfo);
-    // var_dump($groupe);
 
     // Verification d'envoi de fichier puis mise à jour de la image du groupe
     if (!empty($_FILES["photo"]["name"])) {
@@ -42,30 +38,17 @@ if (!empty($_POST)) {
             $filename = $uploadResult['file'];
 
 
-            $oldValue = $groupe->findBy(array("id" => $groupe->getId()));
+            $currentGroupe = $groupe->findBy(array("id" => $groupe->getId()));
 
 
 
-            if (isset($oldValue->image) && !empty($oldValue->image)) {
+            if (!empty($currentGroupe->image)) {
                 try {
-                    if (!unlink(Config::UPLOAD_URL . $oldValue->image)) {
 
-                        $response = array(
-                            "status" => -1,
-                            "message" => "Une erreur est survenue! Veuillez réessayer"
-                        );
-                        // $response = array(
-                        //     "status" => 1,
-                        //     "message" => json_encode($groupeInfo)
-                        // );
-
-                        sendResponse($response);
-                    }
+                    unlink(Config::UPLOAD_URL . $currentGroupe->photo);
                 } catch (Exception $e) {
                     // TODO : Enregistrer dans le journal
-
-                    echo json_encode($e);
-                    // return;
+                    // Example : La photo du Groupe ($currentGroupe->nom) avec l'id Sanitizer::sanitizeGet("id") n'a pas ete supprime ( $currentGroupe->photo)
                 }
             }
             $groupeInfo = array_merge($groupeInfo, array("image" => $filename));
@@ -111,7 +94,14 @@ if (isset($_GET)) {
 
         // Suppression d'un contact d'un groupe donne
         if ($action === "delete") {
-            $gpeC->removeContactFromGroup($idContact, $idGroupe);
+
+            try {
+
+                $gpeC->removeContactFromGroup($idContact, $idGroupe);
+            } catch (Exception $ex) {
+                // TODO : Enregistrer dans le journal
+                // echo $ex;
+            }
 
             $response = array(
                 "status" => 1,
@@ -165,25 +155,22 @@ if (isset($_GET)) {
     // SI DELETE alors on supprime l'élément. 
     // C'est un cas spécial de GET 
     // Normalement on pouvait utiliser la methode DETELE
-    if (Sanitizer::sanitizeGet("action") === "delete") {
-        $currentContact = $groupe->findBy(array("id" => Sanitizer::sanitizeGet("id")));
+    if (Sanitizer::sanitizeGet("action") === "delete" && Sanitizer::sanitizeGet('id') !== null) {
 
-        $nom = $currentContact->nom;
-        if (isset($currentContact->image) && !empty($currentContact->image)) {
-            // try {
-            if (!unlink(Config::UPLOAD_URL . $currentContact->image)) {
+        $currentGroupe = $groupe->findBy(array("id" => Sanitizer::sanitizeGet("id")));
 
-                $response = array(
-                    "status" => -1,
-                    "message" => "Error : Groupe with id " . Sanitizer::sanitizeGet("id") . " not deleteted!"
-                );
+        $nom = $currentGroupe->nom;
 
-                sendResponse($response);
+        if (!empty($currentGroupe->image)) {
+            try {
+                unlink(Config::UPLOAD_URL . $currentGroupe->image);
+            } catch (Exception $e) {
+                // TODO : Enregistrer dans le journal
+                // Example : La photo du Groupe ($currentGroupe->nom) avec l'id Sanitizer::sanitizeGet("id") n'a pas ete supprime ( $currentGroupe->image)
             }
-            // } catch (Exception $e) {
-            // TODO : Enregistrer dans le journal
-            // }
         }
+
+
         $gpeC->removeGroupe((int)Sanitizer::sanitizeGet("id"));
         $groupe->delete((int)Sanitizer::sanitizeGet("id"));
 
@@ -192,18 +179,6 @@ if (isset($_GET)) {
             "status" => 1,
             "message" => "Groupe {" . $nom . "} a ete supprime!"
         );
-
-        sendResponse($response);
-    }
-
-    // Renvoie 
-    else {
-        $response =
-            array(
-                "status" => 1,
-                "message" => json_encode($groupe->find((int)Sanitizer::sanitizeGet("id")))
-
-            );
 
         sendResponse($response);
     }

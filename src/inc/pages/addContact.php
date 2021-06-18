@@ -38,14 +38,14 @@ if (!empty($_POST)) {
 
         $uploadResult = $file->uploadFile();
 
-        if (isset($uploadResult["upload"]) and !$uploadResult["upload"]) {
+        if (!$uploadResult["upload"]) {
             $response = array(
                 "status" => 404,
                 "message" => $uploadResult['error']
             );
 
-            header("location:/?status=-1&msg=".$response['message']);
-            
+            header("location:?status=-1&msg=" . $response['message']);
+
             exit();
         } else {
             $filename = $uploadResult['file'];

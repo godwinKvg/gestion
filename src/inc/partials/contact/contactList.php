@@ -67,7 +67,7 @@
             <?php } ?>
         </tbody>
     </table>
-    <a class=" btn btn-sm btn-outline-primary" href="/addContact">Ajouter Contact</a>
+    <a class=" btn btn-sm btn-outline-primary my-2" href="/addContact">Ajouter Contact</a>
 
 
 </div>

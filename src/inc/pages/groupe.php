@@ -1,6 +1,7 @@
 <?php
 
 require_once 'src/inc/classes/Groupe.php';
+require_once 'src/inc/classes/Contact.php';
 
 $groupe = new Groupe;
 $contact = new COntact;
@@ -22,6 +23,8 @@ if (!empty($groups)) {
 
 <?php
 } else {
+
+    require_once 'src/inc/partials/header.php';
 
     echo '<div class="container h-100 d-flex align-items-center flex-column justify-content-center">
         <h1>Liste vide</h1>

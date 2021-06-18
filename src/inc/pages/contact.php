@@ -23,6 +23,8 @@ if (!empty($contacts)) {
 <?php
 } else {
 
+    require_once 'src/inc/partials/header.php';
+
     echo '<div class="container h-100 d-flex align-items-center flex-column justify-content-center">
         <h1>Liste vide</h1>
         <a href="/?p=addContact" class="btn btn-primary">Ajouter Contact</a>

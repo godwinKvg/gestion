@@ -49,15 +49,15 @@ CREATE TABLE IF NOT EXISTS `contact` (
 
 INSERT INTO `contact` (`id`, `nom`, `prenom`, `email_pro`, `email_perso`, `telephone1`, `telephone2`, `adresse`, `genre`, `photo`) VALUES
 (1, 'kavege', 'kodjo godwin', 'goddwinkavege@gmail.com', 'godwinkvg@gmail.com', '+212638796620', '+212762408108', 'Rue Souani', 'homme', '2.jfif'),
-(2, 'Nadah', 'El Meliani', 'ElMeliani@gmail.com', 'ElMeliani@gmail.com', '+232 93 939 73', '+383 3838339', 'Mon Domicile', 'femme', '3.png'),
+(2, 'Nadah', 'El Meliani', 'ElMeliani@gmail.com', 'ElMeliani@gmail.com', '+232 93 939 73', '+383 3838339', 'Mon Domicile', 'femme', '16.jfif'),
 (3, 'Dahbia', 'Mrabet', 'Mrabet@gmail.com', 'Mrabet@gmail.com', '+232 93 939 73', '+383 3838339', 'Mon Domicile', 'femme', '11.jfif'),
 (4, 'Bahéchar', 'Salamah', 'Salamah@gmail.com', 'Salamah@gmail.com', '+232 93 939 73', '+383 3838339', 'Mon Domicile', 'homme', '12.jfif'),
-(5, 'Saadet', 'Oufkir', 'Oufkir@gmail.com', 'Oufkir@gmail.com', '+232 93 939 73', '+383 3838339', 'Mon Domicile', 'femme', '4.jpg'),
-(6, 'Hudun', 'Assaraf', 'Assaraf@gmail.com', 'Assaraf@gmail.com', '+232 93 939 73', '+383 3838339', 'Mon Domicile', 'femme', '6.jpg'),
+(5, 'Saadet', 'Oufkir', 'Oufkir@gmail.com', 'Oufkir@gmail.com', '+232 93 939 73', '+383 3838339', 'Mon Domicile', 'femme', '10.jfif'),
+(6, 'Hudun', 'Assaraf', 'Assaraf@gmail.com', 'Assaraf@gmail.com', '+232 93 939 73', '+383 3838339', 'Mon Domicile', 'femme', '15.jfif'),
 (7, 'Zafzaf', 'Reshma', 'Reshma@gmail.com', 'Reshma@gmail.com', '+232 93 939 73', '+383 3838339', 'Mon Domicile', 'femme', '8.jfif'),
-(8, 'Seddiki', 'Hanane', 'Hanane@gmail.com', 'Hanane@gmail.com', '+232 93 939 73', '+383 3838339', 'Mon Domicile', 'femme', '11.jfif'),
-(9, 'Abécassis', 'Baysan', 'Baysan@gmail.com', 'Baysan@gmail.com', '+232 93 939 73', '+383 3838339', 'Mon Domicile', 'femme', '4.jfif'),
-(10, 'Qamari', 'Jabalah', 'Jabalah@gmail.com', 'Jabalah@gmail.com', '+232 93 939 73', '+383 3838339', 'Mon Domicile', 'homme', '7.jpg');
+(8, 'Seddiki', 'Hanane', 'Hanane@gmail.com', 'Hanane@gmail.com', '+232 93 939 73', '+383 3838339', 'Mon Domicile', 'femme', '13.jfif'),
+(9, 'Abécassis', 'Baysan', 'Baysan@gmail.com', 'Baysan@gmail.com', '+232 93 939 73', '+383 3838339', 'Mon Domicile', 'femme', '14.jfif'),
+(10, 'Qamari', 'Jabalah', 'Jabalah@gmail.com', 'Jabalah@gmail.com', '+232 93 939 73', '+383 3838339', 'Mon Domicile', 'homme', '7.jfif');
 
 
 
@@ -83,7 +83,7 @@ COMMIT;
 
 INSERT INTO `groupe` (`id`, `nom`, `image`) VALUES 
 (1, 'Famille', 'famille.jfif'),
-(2, 'Amis', 'amis.jfif'),
+(2, 'Amis', 'amis.jpg'),
 (3, 'Informatique', 'info.jfif'),
 (4, 'Industriel', 'industriel.jfif'),
 (5, 'hacker', 'hacker.png');

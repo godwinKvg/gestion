@@ -26,14 +26,14 @@ class GrpeContact extends Model
         // $gpeContact = new GrpeContact;
         $sql = "DELETE FROM {$this->table}  WHERE id_gpe={$idGroupe} AND id_contact={$idContact}";
 
-        return $this->requete($sql)->fetch();
+        return $this->requete($sql);
     }
 
     public function removeGroupe(int $id)
     {
         $sql = "DELETE FROM {$this->table}  WHERE id_gpe={$id}";
 
-        return $this->requete($sql)->fetch();
+        return $this->requete($sql);
     }
 
 
@@ -41,7 +41,7 @@ class GrpeContact extends Model
     {
         $sql = "DELETE FROM {$this->table}  WHERE id_contact={$id}";
 
-        return $this->requete($sql)->fetch();
+        return $this->requete($sql);
     }
 
     public function getId()

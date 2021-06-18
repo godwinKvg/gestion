@@ -120,24 +120,29 @@ updateFrom.addEventListener('submit', (e) => {
                 updateAlert.textContent = "Modification Effectuée";
                 updateAlert.classList.add("show", "alert-success");
                 setTimeout(() => {
-                    updateAlert.classList.remove("show")
+                    updateAlert.classList.remove("show", "alert-success");
                 }, 1000);
 
 
                 updateFrom.querySelector("button[type=submit]").removeAttribute("disabled");
 
             } else {
-                console.log(data.message);
+                // console.log(data.message);
 
                 updateAlert.textContent = data.message;
                 updateAlert.classList.add("show", "alert-danger");
                 setTimeout(() => {
-                    updateAlert.classList.remove("show")
+                    updateAlert.classList.remove("show", "alert-danger")
                 }, 1000);
+
+                updateFrom.querySelector("button[type=submit]").removeAttribute("disabled");
             }
 
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+            console.log(err)
+            updateFrom.querySelector("button[type=submit]").removeAttribute("disabled");
+        });
 
 })
 

@@ -3,7 +3,7 @@ require_once 'Config.php';
 class File
 {
     private $file;
-    private $extensions = ['JPEG', 'PNG', 'JPG', 'SVG'];
+    private $extensions = ['JPEG', 'PNG', 'JPG', 'SVG', 'JFIF'];
     private $target_dir = Config::UPLOAD_URL;
     private $fileToUpload = 'photo';
 
@@ -48,7 +48,7 @@ class File
 
         // Vérifier que cette extension est acceptable
         if (!in_array($imageFileType, $upperExtensions)) {
-            // $uploadOk = false;
+            $uploadOk = false;
             return array(
                 "upload" => false,
                 "error" => "Extension de l'image Invalide!"
@@ -59,7 +59,7 @@ class File
 
         // Vérifier la taille du fichier
         if ($_FILES[$this->fileToUpload]["size"] > 30000000) {
-            // $uploadOk = false;
+            $uploadOk = false;
             return array(
                 "upload" => false,
                 "error" => "Taille de l'image trop grande!"
