@@ -1,10 +1,12 @@
 <?php
 require_once '../inc/classes/File.php';
 require_once '../inc/classes/Contact.php';
+require_once '../inc/classes/GrpeContact.php';
 require_once '../inc/classes/Sanitizer.php';
 require_once '../inc/classes/Config.php';
 
 $contact = new Contact;
+$groupeContact = new GrpeContact;
 
 
 if (!empty($_POST)) {
@@ -48,20 +50,20 @@ if (!empty($_POST)) {
             $oldValue = $contact->findBy(array("id" => $contact->getId()));
 
             if (isset($oldValue->photo) && !empty($oldValue->photo)) {
-                 try {
-                if (!unlink(Config::UPLOAD_URL . $oldValue->photo)) {
+                try {
+                    if (!unlink(Config::UPLOAD_URL . $oldValue->photo)) {
 
-                    $response = array(
-                        "status" => 404,
-                        "message" => "Une erreur est survenue! Veuillez réessayer"
-                    );
-                    // $response = array(
-                    //     "status" => 200,
-                    //     "message" => json_encode($contactInfo)
-                    // );
+                        $response = array(
+                            "status" => 404,
+                            "message" => "Une erreur est survenue! Veuillez réessayer"
+                        );
+                        // $response = array(
+                        //     "status" => 200,
+                        //     "message" => json_encode($contactInfo)
+                        // );
 
-                    sendResponse($response);
-                }
+                        sendResponse($response);
+                    }
                 } catch (Exception $e) {
                     // TODO : Enregistrer dans le journal
 
@@ -88,6 +90,30 @@ if (!empty($_POST)) {
 
 elseif (isset($_GET)) {
 
+    // Rechercher Groupe par nom
+    if (Sanitizer::sanitizeGet('action') === 'recherche' && !empty(Sanitizer::sanitizeGet('value'))) {
+        $search = Sanitizer::sanitizeGet('value');
+
+        $contacts = $contact->findByPhoneOrName($search);
+        $response = array(
+            "status" => 1,
+            "message" => json_encode($contacts)
+        );
+        SendResponse($response);
+    }
+
+    // Renvoie la liste des contacts du groupe
+    if (!empty($_GET['id']) && Sanitizer::sanitizeGet('action') === 'contacts') {
+
+        $id = (int)Sanitizer::sanitizeGet('id');
+        $contacts = $contact->findAllByGroupId($id);
+        $response  = array(
+            "status" => 200,
+            "message" => json_encode($contacts)
+        );
+        sendResponse($response);
+    }
+
 
     // SI DELETE alors on supprime l'élément. 
     // C'est un cas spécial de GET 
@@ -95,10 +121,11 @@ elseif (isset($_GET)) {
 
     if (!empty($_GET['action']) and strtolower(Sanitizer::sanitizeGet("action")) === "delete") {
         $currentContact = $contact->findBy(array("id" => Sanitizer::sanitizeGet("id")));
-    
+        $nom = $currentContact->nom;
 
         if (isset($currentContact->photo) && !empty($currentContact->photo)) {
             // try {
+
             if (!unlink(Config::UPLOAD_URL . $currentContact->photo)) {
 
                 $response = array(
@@ -112,20 +139,22 @@ elseif (isset($_GET)) {
             // TODO : Enregistrer dans le journal
             // }
         }
+        $groupeContact->removeGroupe((int)Sanitizer::sanitizeGet("id"));
 
         $contact->delete((int)Sanitizer::sanitizeGet("id"));
 
 
         $response = array(
             "status" => 200,
-            "message" => "Contact with id " . Sanitizer::sanitizeGet("id") . " deleted!"
+            "message" => "Contact {" . $nom . "} deleted!"
         );
 
         sendResponse($response);
     }
-// elseif (!empty($_GET['action']) and strtolower(Sanitizer::sanitizeGet("action")) === "getGroups") {
-    
-// }
+
+
+
+
     // Sinon on renvoie la ressource demandée
     else {
         $response =

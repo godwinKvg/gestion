@@ -14,15 +14,24 @@ class Groupe extends Model
     }
 
 
-    public function findByName($nom)
+    public function findAllByName($nom)
     {
-        return $this->findBy(['nom' => $nom]);
+        $nom = strtolower(Sanitizer::sanitize($nom));
+        $sql = "SELECT * FROM {$this->table} WHERE LOWER(nom) LIKE '%$nom%'";
+        return $this->requete($sql)->fetchAll();
     }
 
-    public function findAllByContactId(int $id){
-        $sql = "SELECT g.* FROM {$this->table} g, contact_groupe gc WHERE gc.id_contact= {$id} AND gc.id_contact= g.id ";
-        return $this->requete($sql)->fetch();
+    public function findAllByContactId(int $id)
+    {
+        // $gpeContact = new GrpeContact;
+        $sql = "SELECT g.* FROM {$this->table} g, contact_groupe gc WHERE gc.id_gpe=g.id AND gc.id_contact={$id}";
+
+
+
+        return $this->requete($sql)->fetchAll();
     }
+
+
 
     /**
      * Get the value of Id

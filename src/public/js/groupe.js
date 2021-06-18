@@ -1,22 +1,72 @@
 
 const GROUPE_API_URL = 'src/api/gestionGroupe.php';
+const CONTACT_API_URL = 'src/api/gestionContact.php';
 const IMAGE_DIRECTORY = "/upload/";
 const PUBLIC_DIRECTORY = "src/public/images/groupe.png";
 
 let alert = document.querySelector('#alert');
-
 const progress = document.querySelector('.progress');
 
-function showAlert(msg, status = 1) {
+// Fonction pour la recherche
+function rechercher(event) {
+    const recherche = event.target.value;
+
+    if (recherche != '') {
+
+        setTimeout(() => {
+
+            document.querySelector("#search").classList.remove("d-none");
+
+
+
+            let groupContent = '';
+            fetch(`${GROUPE_API_URL}?action=recherche&value=${recherche}`)
+                .then(data => data.json())
+                .then(data => {
+                    const groupes = JSON.parse(data.message);
+                    if (groupes.length >= 1) {
+                        groupes.forEach(group => {
+
+                            groupContent += `<div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="d-flex align-items-center">
+                <img src=${('/upload/' + group.image) || '/src/public/images/profile.svg'} alt="Groupe Profile" class="rounded-circle me-2" width="50">
+                <span class="fw-bold"> ${group.nom} </span >
+                </div ></div>`;
+
+
+                        })
+
+
+                    } else {
+                        groupContent = `<p class='text-white p-2'>Aucun groupe ayant pour nom {${recherche}} </p>`;
+                    }
+
+                    document.querySelector("#searchList").innerHTML = groupContent;
+                })
+        }, 500);
+
+    } else {
+        document.querySelector("#search").classList.add("d-none");
+
+    }
+
+}
+
+
+function showAlert(msg, status = 0) {
+    alert.style.zIndex = 108000;
     alert.textContent = msg;
-    if (status) {
+    if (status === 1) {
         alert.classList.add("show", "alert-success");
     } else {
         alert.classList.add("show", "alert-danger");
     }
     setTimeout(() => {
-        alert.classList.remove("show")
-    }, 3000);
+
+        alert.classList.remove("show", "alert-danger", "alert-success");
+        alert.style.zIndex = 0;
+
+    }, 1000);
 }
 
 document.querySelectorAll("form").forEach(form => {
@@ -67,26 +117,23 @@ document.querySelectorAll("form").forEach(form => {
                 form.querySelector("button[type=submit]").setAttribute("disabled", "disabled");
 
                 progress.classList.add("d-none");
-                if (data.status === 200) {
+                if (data.status === 1) {
 
                     const groupe = JSON.parse(data.message);
 
-                    let group = document.querySelector("#row" + groupe.id);
+                    let contact = document.querySelector("#row" + groupe.id);
 
-                    group.querySelector("span").textContent = groupe.nom;
+                    contact.querySelector("span").textContent = groupe.nom;
 
-                    groupe.image ? group.querySelector('img')
+                    groupe.image ? contact.querySelector('img')
                         .src = IMAGE_DIRECTORY + groupe.image : '';
                     oldName = groupe.nom;
 
                     showAlert("Modification effectuee!", 1);
-                    console.log('fait');
 
 
                 } else {
                     showAlert(data.message, 1);
-
-
                 }
 
             })
@@ -128,25 +175,103 @@ document.querySelectorAll("form").forEach(form => {
 
 // Fonctions appélées dans GroupeList
 
-
-
 function supprimerGroupe(id) {
     if (confirm("Voulez vous vraiment supprimer ce groupe ?")) {
 
         fetch(GROUPE_API_URL + "?action=delete&id=" + id)
             .then(data => data.json())
             .then(data => {
-                if (data.status === 200) {
+                if (data.status === 1) {
 
-                    showAlert(data.message);
+                    showAlert(data.message, 1);
                     document.querySelector("#row" + id).remove();
 
 
                 }
             })
             .catch(() => {
-                showAlert("Une erreur s'est produite. Veuillez reessayer!!");
+                showAlert("Une erreur s'est produite. Veuillez reessayer!!", 0);
 
             });
     }
+}
+
+
+//  Ajout d'un contact a un groupe  
+function ajouterContact(idC) {
+    const id = sessionStorage.getItem("idG");
+    fetch(`${GROUPE_API_URL}?action=add&idG=${id}&idC=${idC}`)
+        .then(data => data.json())
+        .then(data => {
+            if (data.status === 1) {
+
+                showAlert(data.message, 1);
+                // document.querySelector("#row" + id).remove();
+            }
+            else if (data.status === -1) {
+                showAlert(data.message, 0);
+            }
+        })
+        .catch((err) => {
+            // console.log(err);
+            showAlert("Une erreur s'est produite. Veuillez reessayer!!", 0);
+
+        });
+}
+
+
+function getContacts(id) {
+    let contacts = [];
+    const contactList = document.querySelector("#contactList");
+    fetch(`${CONTACT_API_URL}?id=${id}&action=contacts`)
+        .then(data => data.json())
+        .then(
+            (data) => {
+                let contactContent = '';
+
+                contacts = JSON.parse(data.message);
+                if (contacts.length >= 1) {
+
+                    contacts.forEach((contact, index) => {
+
+                        contactContent += `<div class="d-flex justify-content-between align-items-center mb-3" id = contact${index}>
+                <div class="d-flex align-items-center">
+                    <img src=${('/upload/' + contact.photo) || '/src/public/images/profile.svg'} alt="Contact Profile" class="rounded-circle me-2" width="50">
+                        <div>
+                            <span class="fw-bold d-block"> ${contact.nom} ${contact.prenom} </span >
+                            <span class="text-muted" style="font-size:smaller"> ${contact.adresse} </span >
+                        </div>
+                        </div >
+                    <a class="mb-1 btn btn-sm btn-danger" onclick="retirerDuGroupe(${id},${contact.id},${index})">Retirer</a>
+                </div> `
+                    })
+                } else {
+                    contactContent = "<p class='text-danger p-2'>Ce groupe ne possede pas de contact</p>";
+                }
+                contactList.innerHTML = contactContent;
+            }
+        )
+        .catch(err => {
+            contactList.innerHTML = "<p class='text-danger p-2'>Une erreur s'est produite</p>";
+
+            // TODO : Envoyer l'erreur au serveur.
+            // console.log(err);
+        })
+
+
+}
+
+// Retirer le contact du groupe 
+function retirerDuGroupe(idG, idC, index) {
+    fetch(`${GROUPE_API_URL}?idC=${idC}&idG=${idG}&action=delete`)
+        .then(data => data.json())
+        .then(
+            (data) => {
+                showAlert(data.message, 1);
+                document.querySelector('#contact' + index).remove();
+            }
+        )
+        .catch(err => {
+            // console.log(err);
+        });
 }

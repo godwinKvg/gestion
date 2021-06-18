@@ -3,13 +3,18 @@
 require_once 'src/inc/classes/Groupe.php';
 
 $groupe = new Groupe;
+$contact = new COntact;
 
+$contacts = $contact->findAll();
 $groups = $groupe->findAll();
 
 if (!empty($groups)) {
 
     require_once 'src/inc/partials/header.php';
     require_once 'src/inc/partials/groupe/groupList.php';
+    require_once 'src/inc/partials/groupe/groupContacts.php';
+    require_once 'src/inc/partials/groupe/addContactToGroup.php';
+
 
 ?>
 

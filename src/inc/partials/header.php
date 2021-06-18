@@ -14,7 +14,7 @@
 	crossorigin="anonymous"> -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="src/public/bootstrap/css/bootstrap.min.css">
-    <script src="src/public/bootstrap/js/bootstrap.min.js"></script>
+    <!-- <script src="src/public/bootstrap/js/bootstrap.min.js"></script> -->
     <link rel="shortcut icon" href="src/public/images/favicon.png" type="image/png">
 
 
@@ -118,9 +118,26 @@
                 </ul>
                 <div class="d-flex mb-2 mb-lg-0">
                     <input class="form-control p-1 me-2" type="search" placeholder="Rechercher" aria-label="Rechercher"
-                        id="recherche">
-                    <button class="btn btn-outline-success btn-sm" type="submit">Rechercher</button>
+                        id="recherche" onkeyup="rechercher(event)">
+
                 </div>
             </div>
         </div>
     </nav>
+
+
+
+    <!-- style=" backdrop-filter: blur(90px);" -->
+    <div class="d-none text-white bg-secondary p-2 w-50 position-fixed top-50 start-50 translate-middle" id="search"
+        style="overflow-y:scroll;max-height:75%">
+        <h5 class="mb-2">Groupes</h5>
+        <div id="searchList">
+
+
+        </div>
+
+        <div class="d-flex justify-content-end">
+            <a class="btn btn-sm btn-warning"
+                onclick="event.target.parentNode.parentNode.classList.add('d-none')">Fermer</a>
+        </div>
+    </div>

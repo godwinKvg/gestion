@@ -1,18 +1,74 @@
-    
+
 const CONTACT_API_URL = 'src/api/gestionContact.php';
 const GROUPE_API_URL = 'src/api/gestionGroupe.php';
 const IMAGE_DIRECTORY = "/upload/";
 const PUBLIC_DIRECTORY = "src/public/images/profile.svg";
 
 const updateAlert = document.querySelector('#updateAlert');
-const deleteAlert = document.querySelector('#deleteAlert');
+const alert = document.querySelector('#alert');
 const alerts = document.querySelectorAll('.alert');
-
 alerts.forEach(elt => {
     elt.classList.add('hide');
 });
-
 const progress = document.querySelector('.progress');
+
+
+
+
+
+// Gestion de la recherche
+// Fonction pour la recherche
+function rechercher(event) {
+    const recherche = event.target.value;
+
+    if (recherche != '') {
+
+        setTimeout(() => {
+
+            document.querySelector("#search").classList.remove("d-none");
+
+
+
+            let contactContent = '';
+            fetch(`${CONTACT_API_URL}?action=recherche&value=${recherche}`)
+                .then(data => data.json())
+                .then(data => {
+                    const contacts = JSON.parse(data.message);
+                    if (contacts.length >= 1) {
+                        contacts.forEach(contact => {
+
+                            console.log(contact);
+                            contactContent += `<div class="d-flex justify-content-between align-items-start mb-3">
+                            <div class="d-flex align-items-center">
+                                <img src=${('/upload/' + contact.photo) || '/src/public/images/profile.svg'} alt="Contact Profile" class="rounded-circle me-2" width="50">
+                                    <div>
+                                        <span class="fw-bold d-block"> ${contact.nom} ${contact.prenom} </span >
+                                        <p class="m-0" style="font-size:smaller"> ${contact.adresse} </p >
+                                        <span class="m-0" style="font-size:smaller"> ${contact.telephone1} </span >
+                                        <span class="m-0 fw-bold" style="font-size:smaller"> (${contact.email_pro}) </span >
+                                    </div>
+                                    </div >
+                            </div> `
+                        });
+
+
+
+                    } else {
+                        contactContent = `<p class='text-white p-2'>Aucun groupe ayant pour nom {${recherche}} </p>`;
+                    }
+
+                    document.querySelector("#searchList").innerHTML = contactContent;
+                })
+        }, 200);
+
+    } else {
+        document.querySelector("#search").classList.add("d-none");
+
+    }
+
+}
+
+
 
 
 // Gestion des formulaires
@@ -147,6 +203,11 @@ function supprimerContact(id) {
             .then(data => {
                 if (data.status === 200) {
                     console.log(data.message);
+                    alert.classList.add("show");
+                    alert.textContent = data.message;
+                    setTimeout(() => {
+                        alert.classList.remove("show");
+                    }, 2000);
                     document.querySelector("#row" + id).remove();
                 }
             })
@@ -156,44 +217,62 @@ function supprimerContact(id) {
 
 // Appel au serveur puis récuperation des groupes
 function getGroups(id) {
-let groups=[];
-    fetch(GROUPE_API_URL + "?idC=" + id)
-    .then(data=>data.json())
-    .then(
-       (data)=>{
-            groups = data;
-
-        console.log(data);
-       }
-    )
-    .catch(err=>{
-
-        // TODO : Envoyer l'erreur au serveur.
-        // console.log(err);
-    })
-
-
-    
-
+    let groups = [];
     const groupList = document.querySelector("#groupList");
-    let groupContent = '';
-    groups.forEach(group => {
+    fetch(`${GROUPE_API_URL}?idC=${id}&action=groups`)
+        .then(data => data.json())
+        .then(
+            (data) => {
+                let groupContent = '';
 
-        groupContent += `<div class="d-flex justify-content-between align-items-center mb-3">
+                groups = JSON.parse(data.message);
+                if (groups.length >= 1) {
+
+                    groups.forEach((group, index) => {
+                        groupContent += `<div class="d-flex justify-content-between align-items-center mb-3" id=gpe${index}>
                         <div class="d-flex align-items-center">
-                            <img src=" ${ group.photo ? '/upload/' . group.photo : '/src/public/images/profile.svg'}" alt="Contact Profile" class="rounded-circle me-2" width="50">
-                            <span class="fw-bold"> ${group.nom} </span>
-                        </div>
-                        <a class="mb-1 btn btn-sm btn-danger supprimer" onclick="retirerDuGroupe(${group.id})">Retirer</a>
-                    </div>`
-    })
-    groupList.innerHTML = groupContent;
+                            <img src=${('/upload/' + group.image) || '/src/public/images/profile.svg'} alt="Groupe Profile" class="rounded-circle me-2" width="50">
+                    <span class="fw-bold"> ${group.nom} </span >
+                        </div >
+                        <a class="mb-1 btn btn-sm btn-danger" onclick="retirerDuGroupe(${group.id},${id},${index})">Retirer</a>
+                    </div > `
+                    })
+                } else {
+                    groupContent = "<p class='text-danger p-2'>Ce contact ne possede pas de groupe</p>";
+                }
+                groupList.innerHTML = groupContent;
+            }
+        )
+        .catch(err => {
+            groupList.innerHTML = "<p class='text-danger p-2'>Une erreur s'est produite</p>";
+
+            // TODO : Envoyer l'erreur au serveur.
+            // console.log(err);
+        })
+
+
+
+
 
 
 }
 
 
-
-function retirerDuGroupe(id) {
-    console.log(id);
+// Retirer le contact du groupe 
+function retirerDuGroupe(idG, idC, index) {
+    fetch(`${GROUPE_API_URL}?idC=${idC}&idG=${idG}&action=delete`)
+        .then(data => data.json())
+        .then(
+            (data) => {
+                alert.classList.add("show");
+                alert.textContent = data.message;
+                setTimeout(() => {
+                    alert.classList.remove("show");
+                }, 2000);
+                document.querySelector('#gpe' + index).remove();
+            }
+        )
+        .catch(err => {
+            console.log(err);
+        });
 }

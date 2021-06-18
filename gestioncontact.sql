@@ -85,8 +85,8 @@ INSERT INTO `groupe` (`id`, `nom`, `image`) VALUES
 (1, 'Famille', 'famille.jfif'),
 (2, 'Amis', 'amis.jfif'),
 (3, 'Informatique', 'info.jfif'),
-(4, 'Industriel', 'industriel.jfif');
-(4, 'hacker', 'hacker.png');
+(4, 'Industriel', 'industriel.jfif'),
+(5, 'hacker', 'hacker.png');
 
 
 -- --------------------------------------------------------

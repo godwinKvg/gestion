@@ -22,24 +22,22 @@ class Contact extends Model
     }
 
 
-
-    public function findByName($nom)
+    public function findByPhoneOrName($value)
     {
-        $nom = Sanitizer::sanitize($nom);
-        return $this->findBy(['nom' => $nom]);
+        $value = Sanitizer::sanitize($value);
+        $sql = "SELECT * FROM {$this->table} WHERE telephone1 LIKE '%$value%' OR telephone2 LIKE '%$value%' OR nom LIKE '%$value%'";
+        return $this->requete($sql)->fetchAll();
     }
 
-    public function findByPhone($telephone)
+    public function findAllByGroupId(int $id)
     {
-        $telephone = Sanitizer::sanitize($telephone);
-        $sql = "SELECT * FROM {$this->table} WHERE telephone1=$telephone OR telephone2=$telephone";
-        return $this->requete($sql)->fetch();
-    }
+        // $gpeContact = new GrpeContact;
+        $sql = "SELECT c.* FROM {$this->table} c, contact_groupe gc WHERE gc.id_contact=c.id AND gc.id_gpe={$id}";
 
-    // public static function getGroups($id){
-    //     $sql = "SELECT * FROM {$this->table}, groupe_contact WHERE telephone1=$telephone OR telephone2=$telephone";
-    //     return $this->requete($sql)->fetch();
-    // }
+
+
+        return $this->requete($sql)->fetchAll();
+    }
 
     /**
      * Get the value of Id
