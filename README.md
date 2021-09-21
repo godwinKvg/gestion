@@ -33,3 +33,18 @@ une image.
 3- Ajouter la possibilité de supprimer un groupe. Bien évidement la suppression d’un groupe
 ne supprime pas les contacts associés. Ajouter également la possibilité de rechercher un
 groupe par son nom.
+
+
+## Utilisation
+
+* Vous clonez le projet
+* Mettez le dossier dans l'emplacement où il faut pour qu'elle puisse s'exécuter
+* Veuillez changer le nom du dossier "upload_original" en "upload". (Il s'agit du dossier qui contient les photos des contacts déjà enrégistré)
+* Ensuite vous pouvez lancer le projet
+
+
+## Remerciements
+
+Merci à vous d'avoir pris le temps de lire ce projet. 
+
+Merci!!
